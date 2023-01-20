@@ -80,5 +80,19 @@ Then, after the IRQ is handled, the Callback function will be called (It is a we
 
 Then we implemented the callback function, keeping the name of the API, HAL_UART_RxCpltCallback (that is called by UART_DMAReceiveCplt). 
 
-
-
+```c
+/* USER CODE BEGIN 4 */
+/**
+  * @brief  Rx Transfer completed callbacks.
+  * @param  huart  Pointer to a UART_HandleTypeDef structure that contains
+  *                the configuration information for the specified UART module.
+  * @retval None
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_SET);
+  	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_5,GPIO_PIN_RESET);
+  	HAL_UART_Receive_IT(&huart2,(uint8_t*)(DEST_ADDRESS),100);
+}
+/* USER CODE END 4 */
+```
