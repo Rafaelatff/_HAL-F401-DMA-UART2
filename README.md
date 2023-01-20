@@ -52,29 +52,33 @@ We have 3 options for the received data in UART, that are inside the 'STM32F4xx_
 
 Then we need to study its parameters and return value. After that we can implement this API inside our code. We will need to send the SRAM1 address, so we set some macros to help us.
 
-´´´c
+```c
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #define OFFSET 			0x800
 #define DEST_ADDRESS 	(SRAM1_BASE+OFFSET)
 /* USER CODE END Includes */
-´´´
+```
 
 After that we can call the API inside the while loop.
 
-´´´c
+```c
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_UART_Receive_DMA(&huart2, (uint8_t*) DEST_ADDRESS, 10); //To receive 10 bytes
+	  HAL_UART_Receive_DMA(&huart2, (uint8_t*) DEST_ADDRESS, 100); //To receive 10 bytes
+	  // after the 100 bytes, its called the callback
   }
   /* USER CODE END 3 */
-´´´c
+```
 
 After 10 bytes, DMA issue an interrupt to the ARM and the IRQ Handler (stm32f4xx_it.c) will be called.
-Then, after the IRQ is handled, the Callback function will be called (It is a weak function that need to be
-implemente in the user file).
-Then we implemented the callback function (keeping the name of the API, HAL_UART_RxCpltCallback).
+Then, after the IRQ is handled, the Callback function will be called (It is a weak function that need to be implemente in the user file).
+
+Then we implemented the callback function, keeping the name of the API, HAL_UART_RxCpltCallback (that is called by UART_DMAReceiveCplt). 
+
+
+
